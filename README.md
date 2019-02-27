@@ -59,3 +59,31 @@ https://www.autotrader.com/cars-for-sale/searchresults.xhtml?makeCodeList=JEEP&m
 
 https://www.autotrader.com/cars-for-sale/vehicledetails.xhtml?listingId=505967271
 
+> global.j.inventory['493297961']
+{ accelerate: false,
+  description: { label: 'New 2018 Jeep Renegade' },
+  hasSpecialOffer: true,
+  id: 493297961,
+  images: { hasStockPhoto: false, primary: 0, sources: [ [Object] ] },
+  isHot: false,
+  isNewlyListed: false,
+  isReducedPrice: false,
+  owner: 567111,
+  pricingDetail:
+   { assetType: 'SUBTRACT',
+     callForPricing: false,
+     ctaLink: true,
+     derived: '22000',
+     first: '$22,000.00',
+     incentive: 22000,
+     msrp: 27440,
+     primary: 22000,
+     salePrice: 22000,
+     specialOffers: 4 },
+  specifications: { mileage: { label: 'miles', value: '2' } },
+  title: 'New 2018 Jeep Renegade FWD Limited',
+  type: 'New',
+  vin: 'ZACCJADB5JPH83582',
+  website:
+   { href: '/cars-for-sale/vehicledetails.xhtml?listingId=493297961&zip=92103&referrer=%2Fcars-for-sale%2Fsearchresults.xhtml%3Fzip%3D92103%26startYear%3D1981%26sortBy%3Drelevance%26incremental%3Dall%26firstRecord%3D0%26marketExtension%3Don%26endYear%3D2020%26modelCodeList%3DJEEPRENEG%26makeCodeList%3DJEEP%26searchRadius%3D50&startYear=1981&numRecords=25&firstRecord=0&endYear=2020&modelCodeList=JEEPRENEG&makeCodeList=JEEP&searchRadius=50' },
+  year: 0 }
