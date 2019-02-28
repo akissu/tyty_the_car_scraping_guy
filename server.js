@@ -57,32 +57,50 @@ site['cargurus.com'].param = {
   isRecentSearchView : 'false'
 }
 
-site['cargurus.com'].f = function (pg_n, callback) {
-  console.log('page ' + pg_n);
-  site['cargurus.com'].param['page'] = '' + pg_n;
+site['cargurus.com'].f = function (h, callback) {
+  //console.log('page ' + pg_n);
+  //site['cargurus.com'].param['page'] = '' + pg_n;
+  site['cargurus.com'].param['page'] = '' + 1;
   param_str = param_builder(site['cargurus.com'].param);
   request(site['cargurus.com'].url.query + param_str, function (error, response, body) {
     console.log('error:', error);
     console.log('statusCode:', response && response.statusCode);
     var j = JSON.parse(body);
-    var r = '';
-    var c = '';
-    /*
-    for(k in j) {
-      r += k + '<br>';
-    }
-    */
-    callback(j.listings);
+    var c = null;
+    h = '<head>';
+    h += '<style>';
+    h += '.cell { margin: 40px; }';
+    h += '</style>';
+    h += '</head>';
+    h += '<html>';
+    h += '<h1>CarGurus</h1>';
+
     for(var i = 0; i < j.listings.length; i++) {
-      if(j.listings[i].makeName.toUpperCase() == 'JEEP') {
-        if(j.listings[i].modelName.toUpperCase() == 'RENEGADE') {
-          c = site['cargurus.com'].url.view + '#listing=' + j.listings[i].id;
-          r += c + '<br>';
-          console.log(c);
+      c = j.listings[i];
+      if(c.makeName.toUpperCase() == 'JEEP') {
+        if(c.modelName.toUpperCase() == 'RENEGADE') {
+          if(c.transmission && c.transmission.toUpperCase() == 'M') {
+            h += '<div class="cell">';
+            h += 'id: ' + c.id;
+            h += '<br>';
+            h += 'listedDate: ' + c.listedDate;
+            h += '<br>';
+            h += 'price: ' + c.price;
+            h += '<br>';
+            h += 'transmission: ' + c.transmission;
+            h += '<br>';
+            h += 'mileage: ' + c.mileage;
+            h += '<br>';
+                var l = site['cargurus.com'].url.view + '#listing=' + j.listings[i].id;
+            h += '<a href="' + l + '">Listing Link</a>';
+            h += '<br>';
+            h += '<img src="' + c.mainPictureUrl + '" width="200">';
+            h += '</div>';
+          }
         }
       }
     }
-    //callback(r);
+    site['cars.com'].f(h, callback);
   });
 }
 
@@ -108,9 +126,10 @@ site['cars.com'].param = {
   zc : '92110',
   localVehicles : 'false'
 }
-site['cars.com'].f = function (pg_n, callback) {
-  console.log('page ' + pg_n);
-  site['cars.com'].param['page'] = '' + pg_n;
+site['cars.com'].f = function (h, callback) {
+  //console.log('page ' + pg_n);
+  //site['cars.com'].param['page'] = '' + pg_n;
+  site['cars.com'].param['page'] = '' + 1;
   param_str = param_builder(site['cars.com'].param);
   var options = {
       url: site['cars.com'].url.query + param_str,
@@ -139,26 +158,23 @@ site['cars.com'].f = function (pg_n, callback) {
     if(aa > -1) {
       console.log('CARS.COM JSON Found!');
       j = JSON.parse(a[aa+1]);
+      global.j = JSON.parse(a[aa+1]);
     }
 
-    callback(j.listings);
-    /*
-    var r = '';
-    var c = '';
-    for(k in j) {
-      r += k + '<br>';
+    var c = null;
+    h += '<h1>Cars.com</h1>';
+
+    for(var k in j.listings) {
+      c = j.listings[k];
+      h += '<div class="cell">';
+      h += 'id: ' + k;
+      h += '<br>';
+      h += '<a href="https://www.cars.com/vehicledetail/detail/' + k + '/overview/">Listing Link</a>';
+      h += '<br>';
+      h += '<img src="' + c.vehicle.thumbnailUrl + '" width="200">';
+      h += '</div>';
     }
-    callback(j.listings);
-    for(var i = 0; i < j.listings.length; i++) {
-      if(j.listings[i].makeName.toUpperCase() == 'JEEP') {
-        if(j.listings[i].modelName.toUpperCase() == 'RENEGADE') {
-          c = site['cargurus.com'].url.view + '#listing=' + j.listings[i].id;
-          r += c + '<br>';
-          console.log(c);
-        }
-      }
-    }
-    */
+    site['autotrader.com'].f(h, callback);
   });
 }
 
@@ -184,8 +200,8 @@ site['autotrader.com'].param = {
   'numRecords' : '100',
   'firstRecord' : '0',
 }
-site['autotrader.com'].f = function (pg_n, callback) {
-  console.log('page ' + pg_n);
+site['autotrader.com'].f = function (h, callback) {
+  //console.log('page ' + pg_n);
   param_str = param_builder(site['autotrader.com'].param);
   var options = {
       url: site['autotrader.com'].url.query + param_str,
@@ -204,12 +220,6 @@ site['autotrader.com'].f = function (pg_n, callback) {
     var aa = body.indexOf(');</script>', a);
     var j = JSON.parse(body.substring(a + 'mountRoot('.length, aa));
     var c = null;
-    var h = '<head>';
-    h += '<style>';
-    h += '.cell { margin: 40px; }';
-    h += '</style>';
-    h += '</head>';
-    h += '<html>';
     h += '<h1>Auto Trader</h1>';
 
     for(var c in j.inventory) {
@@ -237,9 +247,9 @@ site['autotrader.com'].f = function (pg_n, callback) {
 
 
 app.get('/scrape', function(req, res){
-  //site['cargurus.com'].f(1, function(data) {
+  //site['autotrader.com'].f(1, function(data) {
   //site['cars.com'].f(1, function(data) {
-  site['autotrader.com'].f(1, function(data) {
+  site['cargurus.com'].f(1, function(data) {
     res.send(data);
   });
 })
